@@ -10,7 +10,7 @@ import tempfile
 
 # In your Flask app file, update a comment or add a version identifier:
 # Version: 1.0.1
-# Built with GitHub Actions
+# Built with GitHub Actions ...
 app = Flask(__name__)
 CORS(app)
 
