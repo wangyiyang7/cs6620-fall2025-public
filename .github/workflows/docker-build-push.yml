@@ -25,24 +25,16 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       
-      # Extract metadata for Docker image (tags and labels)
-      - name: Extract Docker metadata
-        id: meta
-        uses: docker/metadata-action@v5
-        with:
-          images: ${{ secrets.DOCKER_USERNAME }}/cs6620-flask-app
-          tags: |
-            type=raw,value=latest
-            type=sha,prefix={{branch}}-
-            type=ref,event=branch
-      
       # Build and push Docker image
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
         with:
-          context: .
-          push: true
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+            push: true
+            tags: ${{ secrets.DOCKERHUB_USERNAME }}/cs6620-app:latest
+            labels: |
+              org.opencontainers.image.source=${{ github.event.repository.html_url }}
+              org.opencontainers.image.revision=${{ github.sha }}
+              build.source=github-actions
+              build.workflow=${{ github.workflow }}
+              build.run_id=${{ github.run_id }}
+              build.run_number=${{ github.run_number }}
